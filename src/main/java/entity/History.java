@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Objects;
+
 public class History {
     private String userId;
     private String newsId;
@@ -56,5 +58,23 @@ public class History {
                 ", title='" + title + '\'' +
                 ", day=" + day +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof History)) return false;
+        History history = (History) o;
+        return getDay() == history.getDay() &&
+                Objects.equals(getUserId(), history.getUserId()) &&
+                Objects.equals(getNewsId(), history.getNewsId()) &&
+                Objects.equals(getTimestamp(), history.getTimestamp()) &&
+                Objects.equals(getTitle(), history.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getUserId(), getNewsId(), getTimestamp(), getTitle(), getDay());
     }
 }

@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Objects;
+
 public class News {
     private String newId;
     private String title;
@@ -26,5 +28,20 @@ public class News {
                 "newId='" + newId + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof News)) return false;
+        News news = (News) o;
+        return Objects.equals(getNewId(), news.getNewId()) &&
+                Objects.equals(getTitle(), news.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getNewId(), getTitle());
     }
 }

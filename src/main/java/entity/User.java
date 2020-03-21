@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Objects;
+
 public class User {
     private String userId;
     private String interest;
@@ -26,5 +28,20 @@ public class User {
                 "userId='" + userId + '\'' +
                 ", interest='" + interest + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getUserId(), user.getUserId()) &&
+                Objects.equals(getInterest(), user.getInterest());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getUserId(), getInterest());
     }
 }
