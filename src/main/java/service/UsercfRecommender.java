@@ -96,6 +96,7 @@ public class UsercfRecommender {
                         if (!users.contains(recommendUser)) {//如果被推荐用户没有购买当前物品，则进行推荐度计算
                             double itemRecommendDegree = 0.0;
                             for (String user : users) {
+                                //计算指定用户recommenderUser的物品推荐度
                                 itemRecommendDegree += sparseMatrix[userID.get(recommendUser)][userID.get(user)] / Math.sqrt(userItemLength.get(recommendUser) * userItemLength.get(user));//推荐度计算
                             }
                             itemCandidate.put(item, itemRecommendDegree);
@@ -106,18 +107,26 @@ public class UsercfRecommender {
             }
         }
         //TODO:从候选物品中选出最相似的那些
-
-        //计算指定用户recommendUser的物品推荐度
-        for (String item : items) {//遍历每一件物品
-            Set<String> users = itemUserCollection.get(item);//得到购买当前物品的所有用户集合
-            if (!users.contains(recommendUser)) {//如果被推荐用户没有购买当前物品，则进行推荐度计算
-                double itemRecommendDegree = 0.0;
-                for (String user : users) {
-                    itemRecommendDegree += sparseMatrix[userID.get(recommendUser)][userID.get(user)] / Math.sqrt(userItemLength.get(recommendUser) * userItemLength.get(user));//推荐度计算
-                }
-                System.out.println("The item " + item + " for " + recommendUser + "'s recommended degree:" + itemRecommendDegree);
+        itemCandidate = sortDescend(itemCandidate);
+        int recommendNum = 0;
+        for(String item : itemCandidate.keySet()) { //这里固定选出用户可能感兴趣的前十个物品
+            if(recommendNum <= 10) {
+                System.out.println("The item " + item + " for " + recommendUser + "'s recommended degree:" + itemCandidate.get(item));
+                recommendNum++;
             }
         }
+
+//        //计算指定用户recommendUser的物品推荐度
+//        for (String item : items) {//遍历每一件物品
+//            Set<String> users = itemUserCollection.get(item);//得到购买当前物品的所有用户集合
+//            if (!users.contains(recommendUser)) {//如果被推荐用户没有购买当前物品，则进行推荐度计算
+//                double itemRecommendDegree = 0.0;
+//                for (String user : users) {
+//                    itemRecommendDegree += sparseMatrix[userID.get(recommendUser)][userID.get(user)] / Math.sqrt(userItemLength.get(recommendUser) * userItemLength.get(user));//推荐度计算
+//                }
+//                System.out.println("The item " + item + " for " + recommendUser + "'s recommended degree:" + itemRecommendDegree);
+//            }
+//        }
 
     }
 }
