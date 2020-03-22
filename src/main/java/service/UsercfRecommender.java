@@ -8,7 +8,7 @@ import static utils.MapUtils.sortDescend;
 
 
 public class UsercfRecommender {
-    public void recommender(Vector<History> history, int userNum) {
+    public void recommender(List<History> history, int userNum) {
         int[][] sparseMatrix = new int[userNum][userNum];//建立用户稀疏矩阵，用于用户相似度计算【相似度矩阵】
         Map<String, Integer> userItemLength = new HashMap<>();//存储每一个用户对应的不同物品总数  eg: A 3
         Map<String, Set<String>> itemUserCollection = new HashMap<>();//建立物品到用户的倒排表 eg: a A B
@@ -106,7 +106,7 @@ public class UsercfRecommender {
                 count++;
             }
         }
-        //TODO:从候选物品中选出最相似的那些
+        //从候选物品中选出最相似的那些
         itemCandidate = sortDescend(itemCandidate);
         int recommendNum = 0;
         for(String item : itemCandidate.keySet()) { //这里固定选出用户可能感兴趣的前十个物品

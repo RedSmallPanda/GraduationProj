@@ -41,6 +41,14 @@
           limit #{count};
     </select>
 
+    <select id="queryUserNumInNLines" resultType="java.lang.Integer">
+        select
+          count(distinct thistory.user_id)
+        from
+          new_history thistory
+          limit #{count};
+    </select>
+
     <!--插入数据-->
     <!--<insert id="insertUser" parameterType="com.zpc.mybatis.pojo.User">-->
         <!--INSERT INTO tb_user (-->
