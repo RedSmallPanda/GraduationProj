@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
-<mapper namespace="HistoryDao">
+<mapper namespace="NewsDao">
     <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
        resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
      -->
@@ -12,41 +12,24 @@
     <!--</select>-->
 
     <!--使用别名-->
-    <select id="queryHistoryByUIdAndNId" resultType="entity.History">
+    <select id="queryNewsById" resultType="entity.News">
       select
-       thistory.user_id as userId,
-       thistory.news_id as newsId,
-       thistory.timestamp,
-       thistory.title,
-       thistory.day
+       tnews.news_id as newsId,
+       tnews.title,
+       tnews.timestamp,
+       tnews.feature
        from
-       news_history thistory
-       where thistory.user_id = #{uid}
-       and thistory.news_id = #{nid};
+       news tnews
+       where tnews.news_id = #{id};
    </select>
 
-    <select id="queryHistoryAll" resultType="entity.History">
-        select * from news_history;
+    <select id="queryNewsAll" resultType="entity.News">
+        select * from news;
     </select>
 
-    <select id="queryHistoryWithNLines" resultType="entity.History">
-        select
-          thistory.user_id as userId,
-          thistory.news_id as newsId,
-          thistory.timestamp,
-          thistory.title,
-          thistory.day
-        from
-          news_history thistory
-          limit #{count};
-    </select>
-
-    <select id="queryUserNumInNLines" resultType="java.lang.Integer">
-        select
-          count(distinct thistory.user_id)
-        from
-          news_history thistory
-          limit #{count};
+    <select id="queryNewsAllAfterTime" resultType="entity.News">
+        select * from news tnews
+        where tnews.timestamp > #{time};
     </select>
 
     <!--插入数据-->

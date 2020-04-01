@@ -1,3 +1,5 @@
+package test;
+
 import entity.History;
 import entity.User;
 import org.apache.ibatis.io.Resources;

@@ -23,6 +23,9 @@
     </environments>
     <mappers>
         <mapper resource="mappers/UserDaoMapper.xml"/>
+        <mapper resource="mappers/HistoryDaoMapper.xml"/>
+        <mapper resource="mappers/NewsDaoMapper.xml"/>
+        <mapper resource="mappers/RecommendationDaoMapper.xml"/>
     </mappers>
 
 </configuration>

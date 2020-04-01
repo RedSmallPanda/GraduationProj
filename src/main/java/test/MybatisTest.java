@@ -1,3 +1,5 @@
+package test;
+
 import entity.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;

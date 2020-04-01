@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="RecommendationDao">
+    <!-- statement，内容：sql语句。id：唯一标识，随便写，在同一个命名空间下保持唯一
+       resultType：sql语句查询结果集的封装类型,tb_user即为数据库中的表
+     -->
+    <!--<select id="queryUserById" resultType="com.zpc.mybatis.pojo.User">-->
+    <!--select * from tb_user where id = #{id}-->
+    <!--</select>-->
+
+    <!--使用别名-->
+    <select id="queryRecommendationByUserId" resultType="entity.Recommendation">
+      select
+       rec.id,
+       rec.user_id as userId,
+       rec.news_id as newsId,
+       rec.rec_time as recTime,
+       rec.rec_num as recNum
+       from
+       recommendation rec
+       where rec.user_id = #{id};
+   </select>
+
+    <insert id="insertRecommendation" parameterType="entity.Recommendation">
+        INSERT INTO recommendation (
+        id,
+        user_id,
+        news_id,
+        rec_time,
+        rec_num
+        )
+        VALUES (
+        null,
+        #{userId},
+        #{newsId},
+        #{recTime},
+        #{recNum}
+        );
+    </insert>
+
+
+    <!--<update id="updateUser" parameterType="com.zpc.mybatis.pojo.User">-->
+        <!--UPDATE tb_user-->
+        <!--<trim prefix="set" suffixOverrides=",">-->
+            <!--<if test="userName!=null">user_name = #{userName},</if>-->
+            <!--<if test="password!=null">password = #{password},</if>-->
+            <!--<if test="name!=null">name = #{name},</if>-->
+            <!--<if test="age!=null">age = #{age},</if>-->
+            <!--<if test="sex!=null">sex = #{sex},</if>-->
+            <!--<if test="birthday!=null">birthday = #{birthday},</if>-->
+            <!--updated = now(),-->
+        <!--</trim>-->
+        <!--WHERE-->
+        <!--(id = #{id});-->
+    <!--</update>-->
+
+    <!--<delete id="deleteUser">-->
+        <!--delete from tb_user where id=#{id}-->
+    <!--</delete>-->
+</mapper>

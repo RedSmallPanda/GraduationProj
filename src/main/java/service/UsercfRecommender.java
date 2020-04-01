@@ -45,10 +45,10 @@ public class UsercfRecommender {
 
             //建立用户--物品倒排表
             if (userItemCollection.containsKey(user_item.getUserId())) {//如果已经包含对应的用户--物品映射，直接添加对应的物品
-                itemUserCollection.get(user_item.getUserId()).add(user_item.getNewsId());
+                userItemCollection.get(user_item.getUserId()).add(user_item.getNewsId());
             } else {//否则创建对应用户--物品集合映射
-                itemUserCollection.put(user_item.getUserId(), new HashSet<String>());//创建用户--物品倒排关系
-                itemUserCollection.get(user_item.getUserId()).add(user_item.getNewsId());
+                userItemCollection.put(user_item.getUserId(), new HashSet<String>());//创建用户--物品倒排关系
+                userItemCollection.get(user_item.getUserId()).add(user_item.getNewsId());
             }
         }
         System.out.println(itemUserCollection.toString());
@@ -74,7 +74,7 @@ public class UsercfRecommender {
         //计算用户之间的相似度【余弦相似性】
         int recommendUserId = userID.get(recommendUser);
         for (int j = 0; j < sparseMatrix.length; j++) {
-            if (j != recommendUserId) {
+            if (j != recommendUserId && sparseMatrix[recommendUserId][j] > 0) {
                 singleUserSimilarity[j] = sparseMatrix[recommendUserId][j] / Math.sqrt(userItemLength.get(idUser.get(recommendUserId)) * userItemLength.get(idUser.get(j)));
             }
         }
@@ -107,7 +107,7 @@ public class UsercfRecommender {
             }
         }
         //从候选物品中选出最相似的那些
-        itemCandidate = sortDescend(itemCandidate);
+        itemCandidate = sortDescend(itemCandidate);//按推荐度降序排列
         int recommendNum = 0;
         for(String item : itemCandidate.keySet()) { //这里固定选出用户可能感兴趣的前十个物品
             if(recommendNum <= 10) {

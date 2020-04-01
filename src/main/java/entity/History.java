@@ -5,7 +5,7 @@ import java.util.Objects;
 public class History {
     private String userId;
     private String newsId;
-    private String timestamp;
+    private Long timestamp;
     private String title;
     private int day;
 
@@ -25,11 +25,11 @@ public class History {
         this.newsId = newsId;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
