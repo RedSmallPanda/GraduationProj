@@ -25,10 +25,6 @@
        and thistory.news_id = #{nid};
    </select>
 
-    <select id="queryHistoryAll" resultType="entity.History">
-        select * from news_history;
-    </select>
-
     <select id="queryHistoryWithNLines" resultType="entity.History">
         select
           thistory.user_id as userId,

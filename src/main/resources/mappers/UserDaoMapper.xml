@@ -21,9 +21,6 @@
        where tuser.user_id = #{id};
    </select>
 
-    <select id="queryUserAll" resultType="entity.User">
-        select * from users;
-    </select>
 
     <!--插入数据-->
     <!--<insert id="insertUser" parameterType="com.zpc.mybatis.pojo.User">-->

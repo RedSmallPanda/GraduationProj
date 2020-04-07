@@ -28,9 +28,29 @@
     </select>
 
     <select id="queryNewsAllAfterTime" resultType="entity.News">
-        select * from news tnews
+        select
+          tnews.news_id as newsId,
+          tnews.title,
+          tnews.timestamp,
+          tnews.feature
+        from news tnews
         where tnews.timestamp > #{time};
     </select>
+
+    <insert id="insertNews" parameterType="entity.News">
+        INSERT INTO news (
+        news_id,
+        title,
+        timestamp,
+        feature
+        )
+        VALUES (
+        #{newsId},
+        #{title},
+        #{timestamp},
+        #{feature}
+        );
+    </insert>
 
     <!--插入数据-->
     <!--<insert id="insertUser" parameterType="com.zpc.mybatis.pojo.User">-->

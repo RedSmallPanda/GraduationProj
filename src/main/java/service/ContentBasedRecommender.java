@@ -24,13 +24,13 @@ public class ContentBasedRecommender {
     }
     即标签-->时间(0代表0:00-1:00以此类推)-->拥有此标签的新闻id和相关度
      */
-    Map<String,Map<Integer,Map<String,Integer>>> tagNewsCollection = new HashMap<>();
-    int pickHours = 2; //选取最近2小时的新闻
-    int recommendNum = 20;//这里一次推荐20条新闻
+    private Map<String,Map<Integer,Map<String,Integer>>> tagNewsCollection = new HashMap<>();
+    private int pickHours = 5; //选取最近2小时的新闻
+    private int recommendNum = 20;//这里一次推荐20条新闻
 
     public void construct(){
         NewsDao newsDao = new NewsDao();
-        List<News> news = newsDao.getNewsAfterTime(DateUtils.getCurrentHourTime()); //获取从最近整点开始的所有新闻
+        List<News> news = newsDao.getNewsAfterTime(DateUtils.getLastHourTime(System.currentTimeMillis()/1000,5)); //获取从最近整点开始的所有新闻
         constructSet(news);
     }
 
@@ -59,7 +59,8 @@ public class ContentBasedRecommender {
         JSONObject obj = JSON.parseObject(interest);
         Map<String,Object> interestMap = (Map<String,Object>)obj;
         List<Integer> neededHours = new ArrayList<>();
-        int currentHour = DateUtils.getHour(System.currentTimeMillis());
+        int currentHour = DateUtils.getHour(System.currentTimeMillis()/1000);
+        System.out.println(currentHour);
         if(currentHour - (pickHours - 1) < 0){ //如果时间横跨了两天
             for(int i = 24-(pickHours-1);i < 24;i++){
                 neededHours.add(i);
@@ -80,7 +81,9 @@ public class ContentBasedRecommender {
             Integer interestValue = (Integer)userEntry.getValue();
             if(tagNewsCollection.containsKey(userInterest)){
                 for(int i:neededHours){
+                    System.out.println(i);
                     Map<String,Integer> idMap = tagNewsCollection.get(userInterest).get(i); //获取到第三级Map
+                    System.out.println(idMap);
                     for(Map.Entry<String,Integer> newsFeature : idMap.entrySet()){
                         if(!res.containsKey(newsFeature.getKey())){
                             res.put(newsFeature.getKey(),new Long(newsFeature.getValue() * interestValue));

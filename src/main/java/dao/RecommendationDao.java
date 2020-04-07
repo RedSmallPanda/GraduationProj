@@ -42,6 +42,7 @@ public class RecommendationDao {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         try {
             int flag = sqlSession.insert("RecommendationDao.insertRecommendation",rec);
+            sqlSession.commit();
         } finally {
             sqlSession.close();
         }

@@ -1,6 +1,7 @@
 package dao;
 
 import entity.News;
+import entity.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -9,7 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.InputStream;
 import java.util.List;
 
-public class NewsDao {
+public class UserDao {
     // 指定全局配置文件
     private String resource = "mybatis-config.xml";
     // 读取配置文件
@@ -17,7 +18,7 @@ public class NewsDao {
     // 构建sqlSessionFactory
     private SqlSessionFactory sqlSessionFactory;
 
-    public NewsDao(){
+    public UserDao(){
         try{
             inputStream = Resources.getResourceAsStream(resource);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
@@ -27,33 +28,15 @@ public class NewsDao {
         }
     }
 
-    public List<News> getNewsAfterTime(Long timestamp){
+
+    public User getUserById(String id){
         SqlSession sqlSession = sqlSessionFactory.openSession();
         try {
-            List<News> news = sqlSession.selectList("NewsDao.queryNewsAllAfterTime", timestamp);
-            return news;
+            User user = sqlSession.selectOne("UserDao.queryUserById", id);
+            return user;
         } finally {
             sqlSession.close();
         }
     }
 
-    public News getNewsById(String id){
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        try {
-            News news = sqlSession.selectOne("NewsDao.queryNewsById", id);
-            return news;
-        } finally {
-            sqlSession.close();
-        }
-    }
-
-    public void setNews(News news){
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        try {
-            sqlSession.insert("NewsDao.insertNews",news);
-            sqlSession.commit();
-        } finally {
-            sqlSession.close();
-        }
-    }
 }
