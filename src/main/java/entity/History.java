@@ -3,11 +3,21 @@ package entity;
 import java.util.Objects;
 
 public class History {
+    private Long historyId;
     private String userId;
     private String newsId;
     private Long timestamp;
     private String title;
     private int day;
+
+
+    public Long getHistoryId() {
+        return historyId;
+    }
+
+    public void setHistoryId(Long historyId) {
+        this.historyId = historyId;
+    }
 
     public String getUserId() {
         return userId;
@@ -50,22 +60,12 @@ public class History {
     }
 
     @Override
-    public String toString() {
-        return "History{" +
-                "userId='" + userId + '\'' +
-                ", newsId='" + newsId + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", title='" + title + '\'' +
-                ", day=" + day +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof History)) return false;
         History history = (History) o;
         return getDay() == history.getDay() &&
+                Objects.equals(getHistoryId(), history.getHistoryId()) &&
                 Objects.equals(getUserId(), history.getUserId()) &&
                 Objects.equals(getNewsId(), history.getNewsId()) &&
                 Objects.equals(getTimestamp(), history.getTimestamp()) &&
@@ -75,6 +75,18 @@ public class History {
     @Override
     public int hashCode() {
 
-        return Objects.hash(getUserId(), getNewsId(), getTimestamp(), getTitle(), getDay());
+        return Objects.hash(getHistoryId(), getUserId(), getNewsId(), getTimestamp(), getTitle(), getDay());
+    }
+
+    @Override
+    public String toString() {
+        return "History{" +
+                "historyId=" + historyId +
+                ", userId='" + userId + '\'' +
+                ", newsId='" + newsId + '\'' +
+                ", timestamp=" + timestamp +
+                ", title='" + title + '\'' +
+                ", day=" + day +
+                '}';
     }
 }

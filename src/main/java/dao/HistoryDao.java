@@ -11,7 +11,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.InputStream;
 import java.util.List;
 
-public class UserDao {
+public class HistoryDao {
     // 指定全局配置文件
     private String resource = "mybatis-config.xml";
     // 读取配置文件
@@ -19,7 +19,7 @@ public class UserDao {
     // 构建sqlSessionFactory
     private SqlSessionFactory sqlSessionFactory;
 
-    public UserDao(){
+    public HistoryDao(){
         try{
             inputStream = Resources.getResourceAsStream(resource);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
@@ -30,21 +30,30 @@ public class UserDao {
     }
 
 
-    public User getUserById(String id){
+    public List<History> getHistoryAllAfterTime(Long timestamp){
         SqlSession sqlSession = sqlSessionFactory.openSession();
         try {
-            User user = sqlSession.selectOne("UserDao.queryUserById", id);
-            return user;
+            List<History> historys = sqlSession.selectList("HistoryDao.queryHistoryAllAfterTime", timestamp);
+            return historys;
         } finally {
             sqlSession.close();
         }
     }
 
-    public void updateUser(User user){
+    public void insertHistory(String userId,String newsId){
         SqlSession sqlSession = sqlSessionFactory.openSession();
         try {
-            int flag = sqlSession.update("UserDao.updateUser", user);
+            User user = sqlSession.selectOne("UserDao.queryUserById", userId);
+            News news = sqlSession.selectOne("NewsDao.queryNewsById", newsId);
+            History history = new History();
+            history.setUserId(user.getUserId());
+            history.setNewsId(news.getNewsId());
+            history.setTimestamp(System.currentTimeMillis()/1000);
+            history.setTitle(news.getTitle());
+            history.setDay(0);
+            int flag = sqlSession.insert("HistoryDao.insertHistory", history);
             sqlSession.commit();
+
         } finally {
             sqlSession.close();
         }

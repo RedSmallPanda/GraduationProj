@@ -21,6 +21,15 @@
        where tuser.user_id = #{id};
    </select>
 
+    <update id="updateUser" parameterType="entity.User">
+        UPDATE users
+        <trim prefix="set" suffixOverrides=",">
+            <if test="interest!=null">interest = #{interest},</if>
+        </trim>
+        WHERE
+        (user_id = #{userId});
+    </update>
+
 
     <!--插入数据-->
     <!--<insert id="insertUser" parameterType="com.zpc.mybatis.pojo.User">-->
@@ -47,20 +56,6 @@
         <!--);-->
     <!--</insert>-->
 
-    <!--<update id="updateUser" parameterType="com.zpc.mybatis.pojo.User">-->
-        <!--UPDATE tb_user-->
-        <!--<trim prefix="set" suffixOverrides=",">-->
-            <!--<if test="userName!=null">user_name = #{userName},</if>-->
-            <!--<if test="password!=null">password = #{password},</if>-->
-            <!--<if test="name!=null">name = #{name},</if>-->
-            <!--<if test="age!=null">age = #{age},</if>-->
-            <!--<if test="sex!=null">sex = #{sex},</if>-->
-            <!--<if test="birthday!=null">birthday = #{birthday},</if>-->
-            <!--updated = now(),-->
-        <!--</trim>-->
-        <!--WHERE-->
-        <!--(id = #{id});-->
-    <!--</update>-->
 
     <!--<delete id="deleteUser">-->
         <!--delete from tb_user where id=#{id}-->

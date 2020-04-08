@@ -14,6 +14,7 @@
     <!--使用别名-->
     <select id="queryHistoryByUIdAndNId" resultType="entity.History">
       select
+       thistory.history_id as historyId,
        thistory.user_id as userId,
        thistory.news_id as newsId,
        thistory.timestamp,
@@ -27,6 +28,7 @@
 
     <select id="queryHistoryWithNLines" resultType="entity.History">
         select
+          thistory.history_id as historyId,
           thistory.user_id as userId,
           thistory.news_id as newsId,
           thistory.timestamp,
@@ -37,6 +39,20 @@
           limit #{count};
     </select>
 
+    <select id="queryHistoryAllAfterTime" resultType="entity.History">
+        select
+          thistory.history_id as historyId,
+          thistory.user_id as userId,
+          thistory.news_id as newsId,
+          thistory.timestamp,
+          thistory.title,
+          thistory.day
+        from
+          news_history thistory
+        where
+          thistory.timestamp > #{time};
+    </select>
+
     <select id="queryUserNumInNLines" resultType="java.lang.Integer">
         select
           count(distinct thistory.user_id)
@@ -44,6 +60,25 @@
           news_history thistory
           limit #{count};
     </select>
+
+    <insert id="insertHistory" parameterType="entity.History">
+        INSERT INTO news_history (
+        history_id,
+        user_id,
+        news_id,
+        timestamp,
+        title,
+        day
+        )
+        VALUES (
+        null,
+        #{userId},
+        #{newsId},
+        #{timestamp},
+        #{title},
+        #{day}
+        );
+    </insert>
 
     <!--插入数据-->
     <!--<insert id="insertUser" parameterType="com.zpc.mybatis.pojo.User">-->
@@ -70,20 +105,6 @@
         <!--);-->
     <!--</insert>-->
 
-    <!--<update id="updateUser" parameterType="com.zpc.mybatis.pojo.User">-->
-        <!--UPDATE tb_user-->
-        <!--<trim prefix="set" suffixOverrides=",">-->
-            <!--<if test="userName!=null">user_name = #{userName},</if>-->
-            <!--<if test="password!=null">password = #{password},</if>-->
-            <!--<if test="name!=null">name = #{name},</if>-->
-            <!--<if test="age!=null">age = #{age},</if>-->
-            <!--<if test="sex!=null">sex = #{sex},</if>-->
-            <!--<if test="birthday!=null">birthday = #{birthday},</if>-->
-            <!--updated = now(),-->
-        <!--</trim>-->
-        <!--WHERE-->
-        <!--(id = #{id});-->
-    <!--</update>-->
 
     <!--<delete id="deleteUser">-->
         <!--delete from tb_user where id=#{id}-->
