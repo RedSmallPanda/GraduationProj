@@ -50,4 +50,14 @@ public class UserDao {
         }
     }
 
+    public int countUser(){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        try {
+            int count = sqlSession.selectOne("UserDao.countUser");
+            return count;
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 }

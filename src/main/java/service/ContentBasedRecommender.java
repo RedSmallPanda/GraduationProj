@@ -34,23 +34,27 @@ public class ContentBasedRecommender {
         constructSet(news);
     }
 
-    public void recommend(User user){
+    public List<Recommendation> recommend(User user){
         //获取和用户喜好最相似的新闻列表，然后将topN条推荐结果插入推荐表
         Map<String,Long> simNews = computeNewsSim(user);
         simNews = sortDescend(simNews);
         int count = 0;
         RecommendationDao recommendationDao = new RecommendationDao();
+        List<Recommendation> res = new ArrayList<>();
         for(String newsId : simNews.keySet()){
-            if(count < 20){
+            if(count < recommendNum){
                 Recommendation rec = new Recommendation();
                 rec.setUserId(user.getUserId());
                 rec.setNewsId(newsId);
                 rec.setRecNum(1);//1表示Content-based Recommendation
                 rec.setRecTime(System.currentTimeMillis()/1000);
-                recommendationDao.insertRecommendation(rec);
+                //TODO:把结果返回到外层后统一插入
+                res.add(rec);
+                //recommendationDao.insertRecommendation(rec);
                 count ++;
             }
         }
+        return res;
 
     }
 

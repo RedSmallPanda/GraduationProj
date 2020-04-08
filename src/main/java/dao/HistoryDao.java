@@ -40,6 +40,16 @@ public class HistoryDao {
         }
     }
 
+    public List<History> getNLineHistory(int lineNum){
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        try {
+            List<History> historys = sqlSession.selectList("HistoryDao.queryHistoryWithNLines", lineNum);
+            return historys;
+        } finally {
+            sqlSession.close();
+        }
+    }
+
     public void insertHistory(String userId,String newsId){
         SqlSession sqlSession = sqlSessionFactory.openSession();
         try {

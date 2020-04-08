@@ -27,7 +27,7 @@ public class UsercfTest {
             List<History> history = sqlSession.selectList("HistoryDao.queryHistoryWithNLines", 1000);
             int userNum = sqlSession.selectOne("HistoryDao.queryUserNumInNLines",1000);
             UsercfRecommender userCF = new UsercfRecommender();
-            userCF.recommender(history,userNum);
+            userCF.recommender(history,userNum,"5034018");
         } finally {
             sqlSession.close();
         }

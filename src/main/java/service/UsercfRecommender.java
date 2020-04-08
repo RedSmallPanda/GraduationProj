@@ -8,7 +8,7 @@ import static utils.MapUtils.sortDescend;
 
 
 public class UsercfRecommender {
-    public void recommender(List<History> history, int userNum) {
+    public Map<String,Double> recommender(List<History> history, int userNum, String recommendUser) {
         int[][] sparseMatrix = new int[userNum][userNum];//建立用户稀疏矩阵，用于用户相似度计算【相似度矩阵】
         Map<String, Integer> userItemLength = new HashMap<>();//存储每一个用户对应的不同物品总数  eg: A 3
         Map<String, Set<String>> itemUserCollection = new HashMap<>();//建立物品到用户的倒排表 eg: a A B
@@ -51,7 +51,7 @@ public class UsercfRecommender {
                 userItemCollection.get(user_item.getUserId()).add(user_item.getNewsId());
             }
         }
-        System.out.println(itemUserCollection.toString());
+        //System.out.println(itemUserCollection.toString());
 
         //计算相似度矩阵【稀疏】
         Set<Map.Entry<String, Set<String>>> entrySet = itemUserCollection.entrySet();
@@ -67,11 +67,11 @@ public class UsercfRecommender {
                 }
             }
         }
-        System.out.println(userItemLength.toString());
-        String recommendUser = "5034018"; //这里先已一个固定的userID来测试；
+        //System.out.println(userItemLength.toString());
         System.out.println(userID.get(recommendUser));
         double[] singleUserSimilarity = new double[userNum];//创建一个维数为用户个数的相似度向量
         //计算用户之间的相似度【余弦相似性】
+        //TODO:处理当没有用户历史记录的时候
         int recommendUserId = userID.get(recommendUser);
         for (int j = 0; j < sparseMatrix.length; j++) {
             if (j != recommendUserId && sparseMatrix[recommendUserId][j] > 0) {
@@ -108,13 +108,15 @@ public class UsercfRecommender {
         }
         //从候选物品中选出最相似的那些
         itemCandidate = sortDescend(itemCandidate);//按推荐度降序排列
-        int recommendNum = 0;
-        for(String item : itemCandidate.keySet()) { //这里固定选出用户可能感兴趣的前十个物品
-            if(recommendNum <= 10) {
-                System.out.println("The item " + item + " for " + recommendUser + "'s recommended degree:" + itemCandidate.get(item));
-                recommendNum++;
-            }
-        }
+        return itemCandidate;
+
+//        int recommendNum = 0;
+//        for(String item : itemCandidate.keySet()) { //这里固定选出用户可能感兴趣的前十个物品
+//            if(recommendNum <= 10) {
+//                System.out.println("The item " + item + " for " + recommendUser + "'s recommended degree:" + itemCandidate.get(item));
+//                recommendNum++;
+//            }
+//        }
 
 //        //计算指定用户recommendUser的物品推荐度
 //        for (String item : items) {//遍历每一件物品

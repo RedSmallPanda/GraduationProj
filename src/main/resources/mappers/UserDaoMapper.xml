@@ -30,6 +30,13 @@
         (user_id = #{userId});
     </update>
 
+    <select id="countUser" resultType="java.lang.Integer">
+        select
+          count(tuser.user_id)
+        from
+          users tuser;
+    </select>
+
 
     <!--插入数据-->
     <!--<insert id="insertUser" parameterType="com.zpc.mybatis.pojo.User">-->
