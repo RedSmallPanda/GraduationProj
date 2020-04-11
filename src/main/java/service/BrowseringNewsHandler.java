@@ -20,20 +20,20 @@ public class BrowseringNewsHandler {
         String userInterest = user.getInterest();
         JSONObject userObj = JSON.parseObject(userInterest);
         Map<String,Object> originalInterestMap = (Map<String,Object>)userObj;
-        Map<String,Integer> interestMap = new HashMap<>();
+        Map<String,Double> interestMap = new HashMap<>();
         for(Map.Entry<String,Object> originInterest : originalInterestMap.entrySet()){
-            interestMap.put(originInterest.getKey(),(Integer)originInterest.getValue());
+            interestMap.put(originInterest.getKey(),(Double)originInterest.getValue());
         }
         String newsFeature = news.getFeature();
         JSONObject newsObj = JSON.parseObject(newsFeature);
         Map<String,Object> featureMap = (Map<String,Object>)newsObj;
         for(Map.Entry<String,Object> feature : featureMap.entrySet()){
             if(interestMap.containsKey(feature.getKey())){
-                Integer interestValue = interestMap.get(feature.getKey()) + (Integer)feature.getValue();
+                Double interestValue = interestMap.get(feature.getKey()) + (Double)feature.getValue();
                 interestMap.put(feature.getKey(),interestValue);
             }
             else{
-                interestMap.put(feature.getKey(),(Integer)feature.getValue());
+                interestMap.put(feature.getKey(),(Double)feature.getValue());
             }
         }
         String updatedInterest = JSON.toJSONString(interestMap);

@@ -20,11 +20,11 @@ public class UserInterestRefresher {
             String interest = user.getInterest();
             JSONObject obj = JSON.parseObject(interest);
             Map<String,Object> interestMap = (Map<String,Object>)obj;
-            Map<String,Integer> updatedMap = new HashMap<>();
+            Map<String,Double> updatedMap = new HashMap<>();
             for(Map.Entry<String,Object> userInterest : interestMap.entrySet()){
-                if((Integer)userInterest.getValue() > 10){
-                    Double newValue = (Integer)userInterest.getValue() * refreshRate;
-                    updatedMap.put(userInterest.getKey(),newValue.intValue());
+                if((Double)userInterest.getValue() > deleteThreshold){
+                    Double newValue = (Double)userInterest.getValue() * refreshRate;
+                    updatedMap.put(userInterest.getKey(),newValue);
                 }
             }
             String updatedInterest = JSON.toJSONString(updatedMap);

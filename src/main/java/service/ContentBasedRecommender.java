@@ -24,7 +24,7 @@ public class ContentBasedRecommender {
     }
     即标签-->时间(0代表0:00-1:00以此类推)-->拥有此标签的新闻id和相关度
      */
-    private Map<String,Map<Integer,Map<String,Integer>>> tagNewsCollection = new HashMap<>();
+    private Map<String,Map<Integer,Map<String,Double>>> tagNewsCollection = new HashMap<>();
     private int pickHours = 5; //选取最近2小时的新闻
     private int recommendNum = 20;//这里一次推荐20条新闻
 
@@ -36,7 +36,7 @@ public class ContentBasedRecommender {
 
     public List<Recommendation> recommend(User user){
         //获取和用户喜好最相似的新闻列表，然后将topN条推荐结果插入推荐表
-        Map<String,Long> simNews = computeNewsSim(user);
+        Map<String,Double> simNews = computeNewsSim(user);
         simNews = sortDescend(simNews);
         int count = 0;
         RecommendationDao recommendationDao = new RecommendationDao();
@@ -58,7 +58,7 @@ public class ContentBasedRecommender {
 
     }
 
-    public Map<String,Long> computeNewsSim(User user){
+    public Map<String,Double> computeNewsSim(User user){
         String interest = user.getInterest();
         JSONObject obj = JSON.parseObject(interest);
         Map<String,Object> interestMap = (Map<String,Object>)obj;
@@ -78,22 +78,22 @@ public class ContentBasedRecommender {
                 neededHours.add(i);
             }
         }
-        Map<String,Long> res = new HashMap<>();
+        Map<String,Double> res = new HashMap<>();
 
         for(Map.Entry<String,Object> userEntry : interestMap.entrySet()){
             String userInterest = userEntry.getKey();
-            Integer interestValue = (Integer)userEntry.getValue();
+            Double interestValue = (Double)userEntry.getValue();
             if(tagNewsCollection.containsKey(userInterest)){
                 for(int i:neededHours){
                     System.out.println(i);
-                    Map<String,Integer> idMap = tagNewsCollection.get(userInterest).get(i); //获取到第三级Map
+                    Map<String,Double> idMap = tagNewsCollection.get(userInterest).get(i); //获取到第三级Map
                     System.out.println(idMap);
-                    for(Map.Entry<String,Integer> newsFeature : idMap.entrySet()){
+                    for(Map.Entry<String,Double> newsFeature : idMap.entrySet()){
                         if(!res.containsKey(newsFeature.getKey())){
-                            res.put(newsFeature.getKey(),new Long(newsFeature.getValue() * interestValue));
+                            res.put(newsFeature.getKey(),new Double(newsFeature.getValue() * interestValue));
                         }
                         else{
-                            Long tempValue = res.get(newsFeature.getKey());
+                            Double tempValue = res.get(newsFeature.getKey());
                             tempValue += newsFeature.getValue() * interestValue;
                             res.put(newsFeature.getKey(),tempValue);
                         }
@@ -116,16 +116,16 @@ public class ContentBasedRecommender {
             String newsId = tempNews.getNewsId();
             for(Map.Entry<String,Object> entry : featureMap.entrySet()){
                 if(!tagNewsCollection.containsKey(entry.getKey())){
-                    Map<Integer,Map<String,Integer>> timeFeatureMap = new HashMap<>();//第二级Map
+                    Map<Integer,Map<String,Double>> timeFeatureMap = new HashMap<>();//第二级Map
                     for(int i = 0;i < 24;i++){
-                        Map<String,Integer> idMap = new HashMap<>();//第三级Map
+                        Map<String,Double> idMap = new HashMap<>();//第三级Map
                         timeFeatureMap.put(i,idMap);
                     }
-                    timeFeatureMap.get(newsHour).put(newsId,(Integer)entry.getValue());
+                    timeFeatureMap.get(newsHour).put(newsId,(Double)entry.getValue());
                     tagNewsCollection.put(entry.getKey(),timeFeatureMap);
                 }
                 else{
-                    tagNewsCollection.get(entry.getKey()).get(newsHour).put(newsId,(Integer)entry.getValue());
+                    tagNewsCollection.get(entry.getKey()).get(newsHour).put(newsId,(Double)entry.getValue());
                 }
             }
 
