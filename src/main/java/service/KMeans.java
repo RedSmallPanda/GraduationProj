@@ -12,6 +12,7 @@ public class KMeans {
     private int maxClusterTimes = 500;//最大迭代次数
     private List<List<User>> clusterList;//聚类的结果
     private List<User> clusteringCenterT;//质心
+    //TODO:填充领域列表
     private List<String> fieldList;//喜好领域列表 如:[ news, entertainment, game, tech, ...... ]
 
     public List<List<User>> clustering() {
@@ -129,6 +130,45 @@ public class KMeans {
         return res;
     }
 
+    private boolean isCenterChange(List<User> preT, List<User> nowT){
+        if (preT == null || nowT == null) {
+            return false;
+        }
+        for (User u1 : preT) {
+            boolean bol = true;
+            for (User u2 : nowT) {
+                if (equals(u1,u2)) {//t1在t2中有相等的，认为该质心未移动
+                    bol = false;
+                    break;
+                }
+            }
+            //有一个质心发生移动，认为需要进行下一次计算
+            if (bol) {
+                return bol;
+            }
+        }
+        return false;
+    }
+
+    public boolean equals(User u1,User u2){
+        Map<String,Double> map1 = JsonUtils.stringToMap(u1.getInterest());
+        Map<String,Double> map2 = JsonUtils.stringToMap(u2.getInterest());
+        for(Map.Entry<String,Double> interest1 : map1.entrySet()){
+            Double diff = interest1.getValue()-map2.get(interest1.getKey());
+            //因为是Double类型，所以定义误差小于0.001即为相等
+            if(Math.abs(diff)>0.001){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void clear(List<List<User>> lists) {
+        for (List<User> list : lists) {
+            list.clear();
+        }
+        lists.clear();
+    }
 
     public List<User> getDataArray() {
         return dataArray;
